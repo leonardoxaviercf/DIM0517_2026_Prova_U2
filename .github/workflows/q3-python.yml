@@ -1,5 +1,11 @@
 name: Python
 
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "develop"
 
 jobs:
   build:
@@ -22,3 +28,11 @@ jobs:
       - name: Check
         run: python -m py_compile src/main.py
 
+      - name: Adiciona tag
+        if: success()
+        run: |
+          TAG="build-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-action[bot]@github.com"
+          git tag -a "$TAG" -m "adiciona tag"
+          git push origin "$TAg"
