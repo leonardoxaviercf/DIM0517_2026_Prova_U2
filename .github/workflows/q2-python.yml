@@ -1,5 +1,11 @@
 name: Python
 
+on:
+  pull_request:
+    types:
+      - assigned
+    branches:
+      - "develop"
 
 jobs:
   build:
@@ -20,3 +26,19 @@ jobs:
       - name: Check
         run: python -m py_compile src/main.py
 
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Salvar repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências de DEV
+        run: pip install -r requirements-dev.txt
+
+      - name: Executar testes
+        run: pytest -v
